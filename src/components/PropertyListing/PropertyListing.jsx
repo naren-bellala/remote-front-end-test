@@ -1,29 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropertyCard from '../PropertyCard';
 import './PropertyListing.scss';
+import { useAsync } from './hooks/usaAsync';
 
 const PropertyListing = () => {
     // Local state management using hooks
-    const [propertyData, setPropertyData] = useState([]);
-
+    const { status, propertiesData } = useAsync();
     // Simple data fetching using hooks can be enhanced with useReducer or data fetching lib
     // and extract as seperate service
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await (await fetch('http://localhost:3000/api/properties?maxPrice=800000')).json();
-            setPropertyData(data);
-        };
-        fetchData().catch(console.error);
-        return () => {
-            setPropertyData([]);
-        };
-    }, []);
-
+    if (status === 'pending') {
+        return <p>loading...</p>;
+    }
     return (
         <>
-            {propertyData.length ? (
+            {status === 'resolved' && propertiesData.length ? (
                 <ul className="PropertyListing">
-                    {propertyData.map((property) => (
+                    {propertiesData.map((property) => (
                         <li key={property.id}>
                             <PropertyCard {...property} />
                         </li>
