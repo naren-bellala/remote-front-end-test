@@ -3,9 +3,9 @@ import PropertyCard from '../PropertyCard';
 import './PropertyListing.scss';
 import { useAsync } from './hooks/usaAsync';
 
-const PropertyListing = () => {
+const PropertyListing = ({ filters }) => {
     // Local state management using hooks
-    const { status, propertiesData } = useAsync();
+    const { status, propertiesData } = useAsync(filters);
     // Simple data fetching using hooks can be enhanced with useReducer or data fetching lib
     // and extract as seperate service
     if (status === 'pending') {
